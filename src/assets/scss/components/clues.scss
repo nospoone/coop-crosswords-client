@@ -1,0 +1,43 @@
+.clues-container {
+	width: 50%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.clues {
+	&:last-child {
+		margin-top: 25px;
+	}
+}
+
+.clues__title {
+	font-size: 26px;
+}
+
+.clues__list {
+	font-size: 18px;
+}
+
+.clues__list--alpha {
+	list-style-type: upper-alpha;
+}
+
+.clues__clue {
+	cursor: pointer;
+	&:not(:first-child) {
+		&::before {
+			content: " — ";
+		}
+	}
+}
+
+.clues__clue--active {
+	color: $darkGreen;
+	&:not(:first-child) {
+		&::before {
+			color: $black;
+		}
+	}
+}

@@ -1,0 +1,54 @@
+.grid-container {
+	height: 100vh;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.grid {
+	border-collapse: collapse;
+}
+
+.grid__cell {
+	border: 2px $darkBlue solid;
+	width: 50px;
+	height: 50px;
+	font-size: 26px;
+	vertical-align: center;
+	text-align: center;
+	background: $pureWhite;
+	color: $lightBlue;
+
+	&:not(.grid__cell--blocked):not(.grid__cell--selected) {
+		&:hover {
+			background: $lightGreen;
+		}
+
+	}
+
+	&:not(.grid__cell--blocked) {
+		cursor: pointer;
+	}
+}
+
+.grid__cell--highlighted {
+	background: $lightGreen;
+}
+
+.grid__cell--selected {
+	background: $darkGreen;
+}
+
+.grid__cell--blocked {
+	background: $darkBlue;
+}
+
+.grid__cell--valid {
+	color: $pureBlack;
+
+	&:not(.grid__cell--highlighted) {
+		background: darken($color: $pureWhite, $amount: 8);
+	}
+}
