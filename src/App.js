@@ -80,7 +80,7 @@ function reducer(state, action) {
 			// Find next valid square to move to
 			let x = state.x;
 			let y = state.y;
-			if (state.direction === 0) {
+			if (state.direction === Direction.HORIZONTAL) {
 				do {
 					x += action.payload === 'backspace' ? -1 : 1;
 				} while (x > -1 && x < temp_data.width - 1 && state.grid[state.y][x].blocked);
