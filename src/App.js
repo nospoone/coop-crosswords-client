@@ -1,9 +1,13 @@
 import React, {useEffect, useContext} from 'react';
+import io from 'socket.io-client';
 
 import Grid from './components/grid';
 import Clues from './components/clues';
 
 import {Store} from './contexts/grid-context';
+
+import Utilities from './utilities';
+
 
 function App() {
 	let mainContainer = null;
@@ -11,10 +15,19 @@ function App() {
 	const {state, dispatch} = useContext(Store);
 
 	useEffect(() => {
-		mainContainer.focus();
+		if (mainContainer !== null) {
+			mainContainer.focus();
+		}
 	});
 
-	return (
+	useEffect(() => {
+		const socket = io('http://localhost:5000');
+		socket.on('getMeta', data => {
+			dispatch({ type: 'updateGrid', payload: { grid: Utilities.generateGridFromWords(data.data, 8, 12), words: data.data}});
+		});
+	}, [dispatch]);
+
+	return state.grid === null ? null : (
 		<div
 			tabIndex={-1}
 			className="main-container"

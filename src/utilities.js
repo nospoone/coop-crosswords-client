@@ -1,3 +1,5 @@
+import {Direction} from './constants';
+
 function generateWords(grid, width, height, horizontalDefinitions, verticalDefinitions) {
 	const words = [];
 	let word;
@@ -80,7 +82,7 @@ function generateWords(grid, width, height, horizontalDefinitions, verticalDefin
 	return words;
 }
 
-function generateGrid(width, height, answers) {
+function generateEmptyGrid(width, height) {
 	const grid = [];
 	for (let y = 0; y < height; y++) {
 		grid.push([]);
@@ -92,9 +94,9 @@ function generateGrid(width, height, answers) {
 
 			grid[y][x] = {
 				content: '',
-				answer: answers[y][x],
+				answer: '',
 				locked: false,
-				blocked: answers[y][x] === 'x'
+				blocked: true
 			};
 		}
 	}
@@ -131,4 +133,32 @@ function getWordIndexByCoordinates(x, y, direction, words) {
 	return foundWordIndex;
 }
 
-export default {generateWords, generateGrid, getWordIndexByCoordinates};
+function generateGridFromWords(words, width, height) {
+	const grid = generateEmptyGrid(width, height);
+
+	words.forEach(word => {
+		if (word.direction === Direction.HORIZONTAL) {
+			for (let x = word.start.x; x <= word.end.x; x++) {
+				grid[word.start.y][x] = {
+					content: '',
+					answer: word.letters[x - word.start.x],
+					locked: false,
+					blocked: false
+				}
+			}
+		} else if (word.direction === Direction.VERTICAL) {
+			for (let y = word.start.y; y <= word.end.y; y++) {
+				grid[y][word.start.x] = {
+					content: '',
+					answer: word.letters[y - word.start.y],
+					locked: false,
+					blocked: false
+				}
+			}
+		}
+	});
+
+	return grid;
+}
+
+export default {generateWords, getWordIndexByCoordinates, generateGridFromWords};
