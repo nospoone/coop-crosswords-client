@@ -20,7 +20,7 @@ function Grid({grid, x, y, direction, dispatch}) {
 						return (
 							<tr key={rowIndex} className="grid__row">
 								<th className="grid__header grid__header--horizontal">{rowIndex + 1}</th>
-								{row.map((letter, letterIndex) => <Cell key={`${rowIndex}${letterIndex}`} x={letterIndex} y={rowIndex} value={letter} selected={rowIndex === y && letterIndex === x} highlighted={(direction === Direction.HORIZONTAL && y === rowIndex) || (direction === Direction.VERTICAL && x === letterIndex)} valid={true} dispatch={dispatch}/>)}
+								{row.map((letter, letterIndex) => <Cell key={`${rowIndex}${letterIndex}`} x={letterIndex} y={rowIndex} value={letter} selected={rowIndex === y && letterIndex === x} highlighted={(direction === Direction.HORIZONTAL && y === rowIndex) || (direction === Direction.VERTICAL && x === letterIndex)} dispatch={dispatch}/>)}
 							</tr>
 						);
 					})}
