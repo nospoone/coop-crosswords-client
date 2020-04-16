@@ -1,10 +1,12 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useEffect, useContext} from 'react';
 
 import Utilities from './utilities';
 import {Direction} from './constants';
 
 import Grid from './components/grid';
 import Clues from './components/clues';
+
+import {Store} from './contexts/grid-context';
 
 const temp_data = {
 	titre: "mcroises_1_600",
@@ -51,107 +53,19 @@ const temp_data = {
 	],
 };
 
-function reducer(state, action) {
-	switch (action.type) {
-		case 'cellClick':
-			return {
-				...state,
-				x: state.x === action.payload.x && state.y === action.payload.y ? state.x : action.payload.x,
-				y: state.x === action.payload.x && state.y === action.payload.y ? state.y : action.payload.y,
-				direction: state.x === action.payload.x && state.y === action.payload.y ? (state.direction + 1) % 2 : state.direction,
-			}
-		case 'changeDirection':
-			return {
-				...state,
-				direction: (state.direction + 1) % 2
-			}
-		case 'changeLetter':
-			if (state.x === -1 && state.y === -1) {
-				return state;
-			}
-
-			const grid = state.grid;
-
-			// Merci Lewis 😘
-			if (!grid[state.y][state.x].locked) {
-				grid[state.y][state.x].content = action.payload === 'backspace' ? '' : action.payload.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-			}
-
-			// Find next valid square to move to
-			let x = state.x;
-			let y = state.y;
-			if (state.direction === Direction.HORIZONTAL) {
-				do {
-					x += action.payload === 'backspace' ? -1 : 1;
-				} while (x > -1 && x < temp_data.width - 1 && state.grid[state.y][x].blocked);
-			} else {
-				do {
-					y += action.payload === 'backspace' ? -1 : 1;
-				} while (y > -1 && y < temp_data.height - 1 && state.grid[y][state.x].blocked);
-			}
-
-			if (x === temp_data.width || x === -1 || y === temp_data.height || y === -1) {
-				x = -1;
-				y = -1;
-			}
-
-			return {
-				...state,
-				grid,
-				x,
-				y
-			}
-		case 'changePosition':
-			return {
-				...state,
-				x: action.payload.x,
-				y: action.payload.y,
-				direction: action.payload.direction
-			}
-		case 'jumpToNextWord':
-			let wordIndex = Utilities.getWordIndexByCoordinates(state.x, state.y, state.direction, words) + 1;
-			if (wordIndex === words.length) {
-				wordIndex = 0;
-			}
-
-			return {
-				...state,
-				x: words[wordIndex].start.x,
-				y: words[wordIndex].start.y,
-				direction: words[wordIndex].direction
-			};
-		case 'validateGrid':
-			const validatedGrid = state.grid;
-			validatedGrid.forEach(row => {
-				row.forEach(cell => {
-					cell.locked = cell.content === cell.answer;
-				});
-			});
-
-			return {
-				...state,
-				grid: validatedGrid
-			};
-		default:
-			break;
-	}
-}
-
 const words = Utilities.generateWords(temp_data.grille, temp_data.width, temp_data.height, temp_data.definitionsh, temp_data.definitionsv);
 
 function App() {
 	let mainContainer = null;
 
-	const [state, dispatch] = useReducer(reducer, {
-		x: -1,
-		y: -1,
-		direction: 0,
-		grid: Utilities.generateGrid(temp_data.width, temp_data.height, temp_data.grille)
-	});
+	const globalState = useContext(Store);
+	const {dispatch} = globalState;
 
 	useEffect(() => {
 		mainContainer.focus();
 	});
+
+	console.log(globalState);
 
 	return (
 		<div
@@ -178,8 +92,8 @@ function App() {
 				}
 			}}
 		>
-			<Grid grid={state.grid} x={state.x} y={state.y} direction={state.direction} dispatch={dispatch}/>
-			<Clues words={words} x={state.x} y={state.y} direction={state.direction} dispatch={dispatch}/>
+			<Grid grid={globalState.grid} x={globalState.x} y={globalState.y} direction={globalState.direction} dispatch={dispatch}/>
+			<Clues words={words} x={globalState.x} y={globalState.y} direction={globalState.direction} dispatch={dispatch}/>
 		</div>
 	);
 }
