@@ -13,7 +13,6 @@ function Clues({words, x, y, direction, dispatch}) {
 	const currentWord = Utilities.getWordIndexByCoordinates(x, y, direction, words);
 
 	words.forEach((word, wordIndex) => {
-		console.log(Direction);
 		if (word.direction === Direction.HORIZONTAL) {
 			if (wordsElements.horizontal[word.start.y] === undefined) {
 				wordsElements.horizontal[word.start.y] = [];
