@@ -8,7 +8,6 @@ import {Store} from './contexts/grid-context';
 
 import Utilities from './utilities';
 
-
 function App() {
 	let mainContainer = null;
 
