@@ -10,7 +10,8 @@ const initialState = {
 	gridHeight: 0,
 	direction: 0,
 	grid: null,
-	words: []
+	words: [],
+	connected: false
 };
 
 const Store = createContext(initialState);
