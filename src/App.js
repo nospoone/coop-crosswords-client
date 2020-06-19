@@ -1,18 +1,18 @@
 import React, {useEffect, useContext} from 'react';
-import io from 'socket.io-client';
 
 import Grid from './components/grid';
 import Clues from './components/clues';
+
 import Loading from './pages/loading';
+import Auth from './pages/auth';
 
 import {Store} from './contexts/grid-context';
 
 import Utilities from './utilities';
 
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import { SocketIOProvider } from './contexts/socket-context';
 
-function App() {
+function App(...props) {
 	// let mainContainer = null;
 
 	// const {state, dispatch} = useContext(Store);
@@ -58,17 +58,17 @@ function App() {
 	// 		<Clues words={state.words} x={state.x} y={state.y} direction={state.direction} dispatch={dispatch}/>
 	// 	</div>
 	// );
-
 	return (
-		<SocketIOProvider url='http://localhost:5000'>
-			<Router>
-				<Switch>
-					<Route>
-						<Loading/>
-					</Route>
-				</Switch>
-			</Router>
-		</SocketIOProvider>
+		<Router>
+			<Switch>
+				<Route exact path="/auth">
+					<Auth/>
+				</Route>
+				<Route exact path="/">
+					<Loading/>
+				</Route>
+			</Switch>
+		</Router>
 	)
 }
 

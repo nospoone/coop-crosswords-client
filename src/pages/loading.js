@@ -1,14 +1,12 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Redirect} from "react-router-dom";
-import useSocketIO from '../hooks/useSocketIO';
-
-import {Store} from '../contexts/grid-context';
+import {useSocket} from 'use-socketio';
 
 import Spinner from '../components/spinner';
 
 function Loading() {
 	const [redirect, setRedirect] = useState(false);
-	useSocketIO('test', () => {
+	useSocket('test', () => {
 		setRedirect(true);
 	});
 
